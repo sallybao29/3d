@@ -88,91 +88,104 @@ void parse_file ( char * filename,
   
   while ( fgets(line, 255, f) != NULL ) {
     line[strlen(line)-1]='\0';
-    double x, y, z, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4
-      width, height, depth;
+    double x, y, z, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
    
-    if ( strncmp(line, "line", strlen(line)){
-      fgets(line, 255, f);
-      sscanf(line, "%lf %lf %lf %lf %lf %lf", &x, &y, &z, &x1, &y1, &z1);
-      add_edge(pm, x, y, z, x1, y1, z1);
-    }
-    else if ( strncmp(line, "circle", strlen(line)) == 0 ) {
-      fgets(line, 255, f);
-      sscanf(line, "%lf %lf %lf", &x, &y, &z);
-      add_circle(pm, x, y, z, 0.01);
-    }    
-    else if ( strncmp(line, "bezier", strlen(line)) == 0 ) {
-      fgets(line, 255, f);
-      sscanf(line, "%lf %lf %lf %lf %lf %lf %lf %lf",
-	     &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
-      add_curve(pm, x1, y1, x2, y2, x3, y3, x4, y4, 0.01, BEZIER_MODE );
-    }    
-    else if ( strncmp(line, "hermite", strlen(line)) == 0 ) {
-      fgets(line, 255, f);
-      sscanf(line, "%lf %lf %lf %lf %lf %lf %lf %lf",
-	     &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
-      add_curve(pm, x1, y1, x2, y2, x3, y3, x4, y4, 0.01, HERMITE_MODE );
-    }    
-    else if ( strncmp(line, "scale", strlen(line)) == 0 ) {
-      fgets(line, 255, f);  
-      sscanf(line, "%lf %lf %lf", &x, &y, &z);
-      tmp = make_scale(x, y, z);
-      matrix_mult(tmp, transform);
-    }
-    else if ( strncmp(line, "translate", strlen(line)) == 0 ) {
-      fgets(line, 255, f); 
-      sscanf(line, "%lf %lf %lf", &x, &y, &z);
-      tmp = make_translate(x, y, z);
-      matrix_mult(tmp, transform);
-    }
-    else if ( strncmp(line, "xrotate", strlen(line)) == 0 ) {
-      fgets(line, 255, f);
-      sscanf(line, "%lf", &angle);
-      angle = angle * (M_PI / 180);
-      tmp = make_rotX( angle);
-      matrix_mult(tmp, transform);
-    }
-    else if ( strncmp(line, "yrotate", strlen(line)) == 0 ) {
-      fgets(line, 255, f);
-      sscanf(line, "%lf", &angle);
-      angle = angle * (M_PI / 180);
-      tmp = make_rotY( angle);
-      matrix_mult(tmp, transform);
-    }
-    else if ( strncmp(line, "zrotate", strlen(line)) == 0 ) {
-      fgets(line, 255, f);
-      sscanf(line, "%lf", &angle);
-      angle = angle * (M_PI / 180);
-      tmp = make_rotZ( angle);
-      matrix_mult(tmp, transform);
-    }
-    else if ( strncmp(line, "box", strlen(line)) == 0){
-      fgets(line, 255, f);
-      sscanf(line, "%lf" "%lf" "%lf" "%lf" "%lf" "%lf", x, y, z, width, height, depth);
-    }
-    else if ( strncmp(line, "ident", strlen(line)) == 0 ) {
-      ident(transform);
-    }
-    else if ( strncmp(line, "apply", strlen(line)) == 0 ) {
-      matrix_mult(transform, pm);
-    }
-    else if ( strncmp(line, "display", strlen(line)) == 0 ) {
-      clear_screen(s);
-      draw_lines(pm, s, g);
-      display(s);
-    }
-    else if ( strncmp(line, "save", strlen(line)) == 0 ) {
-      fgets(line, 255, f);
-      clear_screen(s);
-      draw_lines(pm, s, g);
-      save_extension(s, line);
-    }
-    else if ( strncmp(line, "quit", strlen(line)) == 0 ) {
-      return;
-    }
-  } 
-  free_matrix(tmp);
-  fclose(f);
+    if ( strncmp(line, "line", strlen(line)) == 0){
+			fgets(line, 255, f);
+			sscanf(line, "%lf %lf %lf %lf %lf %lf", &x, &y, &z, &x1, &y1, &z1);
+			add_edge(pm, x, y, z, x1, y1, z1);
+		}
+		else if ( strncmp(line, "circle", strlen(line)) == 0 ) {
+			fgets(line, 255, f);
+			sscanf(line, "%lf %lf %lf", &x, &y, &z);
+			add_circle(pm, x, y, z, 0.01);
+		}    
+		else if ( strncmp(line, "bezier", strlen(line)) == 0 ) {
+			fgets(line, 255, f);
+			sscanf(line, "%lf %lf %lf %lf %lf %lf %lf %lf",
+						 &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
+			add_curve(pm, x1, y1, x2, y2, x3, y3, x4, y4, 0.01, BEZIER_MODE );
+		}    
+		else if ( strncmp(line, "hermite", strlen(line)) == 0 ) {
+			fgets(line, 255, f);
+			sscanf(line, "%lf %lf %lf %lf %lf %lf %lf %lf",
+						 &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
+			add_curve(pm, x1, y1, x2, y2, x3, y3, x4, y4, 0.01, HERMITE_MODE );
+		}    
+		else if ( strncmp(line, "scale", strlen(line)) == 0 ) {
+			fgets(line, 255, f);  
+			sscanf(line, "%lf %lf %lf", &x, &y, &z);
+			tmp = make_scale(x, y, z);
+			matrix_mult(tmp, transform);
+		}
+		else if ( strncmp(line, "translate", strlen(line)) == 0 ) {
+			fgets(line, 255, f); 
+			sscanf(line, "%lf %lf %lf", &x, &y, &z);
+			tmp = make_translate(x, y, z);
+			matrix_mult(tmp, transform);
+		}
+		else if ( strncmp(line, "xrotate", strlen(line)) == 0 ) {
+			fgets(line, 255, f);
+			sscanf(line, "%lf", &angle);
+			angle = angle * (M_PI / 180);
+			tmp = make_rotX( angle);
+			matrix_mult(tmp, transform);
+		}
+		else if ( strncmp(line, "yrotate", strlen(line)) == 0 ) {
+			fgets(line, 255, f);
+			sscanf(line, "%lf", &angle);
+			angle = angle * (M_PI / 180);
+			tmp = make_rotY( angle);
+			matrix_mult(tmp, transform);
+		}
+		else if ( strncmp(line, "zrotate", strlen(line)) == 0 ) {
+			fgets(line, 255, f);
+			sscanf(line, "%lf", &angle);
+			angle = angle * (M_PI / 180);
+			tmp = make_rotZ( angle);
+			matrix_mult(tmp, transform);
+		}
+		else if ( strncmp(line, "box", strlen(line)) == 0){
+			fgets(line, 255, f);
+			sscanf(line, "%lf" "%lf" "%lf" "%lf" "%lf" "%lf", &x, &y, &z, &x1, &y1, &z1);
+			add_box(pm, x, y, z, x1, y1, z1);
+		}
+		else if ( strncmp(line, "sphere", strlen(line)) == 0){
+			fgets(line, 255, f);
+			sscanf(line, "%lf" "%lf" "%lf", &x, &y, &z);
+			add_sphere(pm, x, y, z, 0.01);
+		}
+		else if ( strncmp(line, "torus", strlen(line)) == 0){
+			fgets(line, 255, f);
+			sscanf(line, "%lf" "%lf" "%lf" "%lf", &x, &y, &z, &x1);
+			add_torus(pm, x, y, z, x1, 0.01);
+		}
+		else if ( strncmp(line, "ident", strlen(line)) == 0 ) {
+			ident(transform);
+		}
+		else if ( strncmp(line, "apply", strlen(line)) == 0 ) {
+			matrix_mult(transform, pm);
+		}
+		else if ( strncmp(line, "display", strlen(line)) == 0 ) {
+			clear_screen(s);
+			draw_lines(pm, s, g);
+			display(s);
+		}
+		else if ( strncmp(line, "clear", strlen(line)) == 0 ){
+			pm -> lastcol = 0;
+		}
+		else if ( strncmp(line, "save", strlen(line)) == 0 ) {
+			fgets(line, 255, f);
+			clear_screen(s);
+			draw_lines(pm, s, g);
+			save_extension(s, line);
+		}
+		else if ( strncmp(line, "quit", strlen(line)) == 0 ) {
+			return;
+		}
+	}
+	free_matrix(tmp);
+	fclose(f);
 }
 
   
